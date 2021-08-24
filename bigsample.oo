@@ -1,0 +1,55 @@
+# comment
+
+CONSTANT = 12345
+
+Point {
+	x = 0
+	y = 0
+}
+
+Rect : Point {
+	width = 0
+	height = 0
+
+	left {
+		x
+	}
+
+	right {
+		x + width
+	}
+
+	top {
+		y
+	}
+
+	bottom {
+		y + height
+	}
+}
+
+Person {
+	name = ""
+}
+
+Thing {
+	number = CONSTANT
+	text = "abcde"
+
+	hello person {
+		print "Hello " + person.name
+	}
+}
+
+main {
+	result = 1.2 + 3.4
+
+	rect1 = Rect
+		.x = 1
+		.y = 2
+		.width = 3
+		.height = 4
+
+	print "Ok!"
+	return 0
+}

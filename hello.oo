@@ -1,0 +1,5 @@
+# comment
+
+main {
+	print "Hello, World!"
+}

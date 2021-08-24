@@ -1,0 +1,28 @@
+{
+  "name": "oo-lang",
+  "version": "0.0.0",
+  "description": "The OO programming language",
+  "main": "ooc.js",
+  "devDependencies": {
+    "eslint-config-classic": "^1.2.1"
+  },
+  "scripts": {
+    "test": "eslint --fix . && node ./test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diogoeichert/oo-lang.git"
+  },
+  "keywords": [
+    "oo",
+    "compiler",
+    "language",
+    "programming"
+  ],
+  "author": "Diogo Eichert",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/diogoeichert/oo-lang/issues"
+  },
+  "homepage": "https://github.com/diogoeichert/oo-lang#readme"
+}
