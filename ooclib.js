@@ -4,7 +4,7 @@ function compile(source, target = "JavaScript") {
 	function compileJavaScript(tree) {
 		function makeFunction(node) {
 			const output = [];
-			output.push("\tfunction " + node.name + "() {");
+			output.push("\n\tfunction " + node.name + "() {");
 
 			if ("main" == node.name) {
 				mainFunction = true;
@@ -40,7 +40,7 @@ function compile(source, target = "JavaScript") {
 		const output = [];
 		let mainFunction;
 		output.push("(function () {");
-		output.push("\t\"use strict\";\n");
+		output.push("\t\"use strict\";");
 
 		if (tree.functions && tree.functions.length) {
 			for (const node of tree.functions) {
