@@ -1,5 +1,5 @@
 # comment
 
-main {
+main() {
 	print "Hello, World!"
 }

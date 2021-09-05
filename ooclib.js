@@ -276,6 +276,8 @@ function parse(tokens, tree = {}) {
 	if ("comment" == token.type) {
 		parseComment();
 	} else if ("identifier" == token.type) {
+		expect("parenOpen");
+		expect("parenClose");
 		expect("space");
 		expect("braceOpen");
 		expect("line");
