@@ -1,0 +1,9 @@
+# comment
+
+main() {
+	print hello()
+}
+
+hello() {
+	return "Hello, World!"
+}

@@ -20,21 +20,29 @@ function compile(source, target = "JavaScript") {
 
 		function makeStatement(node) {
 			switch (node.type) {
+			case "print":
+				return "console.log(" + makeExpression(node.value) + ");";
+
+			case "return":
+				return "return " + makeExpression(node.value) + ";";
+			}
+
+			return makeExpression(node) + ";";
+		}
+
+		function makeExpression(node) {
+			switch (node.type) {
+			case "call":
+				return node.value + "()";
+
 			case "number":
 				return node.value;
 
-			case "print":
-				return "console.log(" + makeStatement(node.value) + ");";
-
-			case "return":
-				return "return " + makeStatement(node.value) + ";";
-
 			case "string":
 				return "\"" + node.value + "\"";
-
-			default:
-				throw new Error("Unknown statement type: " + node.type);
 			}
+
+			throw new Error("Not implemented: " + node);
 		}
 
 		const output = [];
@@ -156,7 +164,9 @@ function parse(tokens, tree = {}) {
 		if (types.length && !types.includes(token.type)) {
 			throw new Error("Unexpected "
 				+ token.type
-				+ " at "
+				+ " \""
+				+ token.value
+				+ "\" at "
 				+ token.line
 				+ ":"
 				+ token.char);
@@ -183,9 +193,18 @@ function parse(tokens, tree = {}) {
 	}
 
 	function parseExpression() {
-		let innerToken = expect(["number", "string"]);
+		let innerToken = expect(["identifier", "number", "string"]);
 
-		if ("number" == innerToken.type) {
+		if ("identifier" == innerToken.type) {
+			if ("parenOpen" == expect("parenOpen").type) {
+				expect("parenClose");
+
+				return {
+					type: "call",
+					value: innerToken.value
+				};
+			}
+		} else if ("number" == innerToken.type) {
 			return {
 				type: "number",
 				value: innerToken.value,
@@ -205,7 +224,7 @@ function parse(tokens, tree = {}) {
 			expect("line");
 			return statements;
 		} else if ("indent" == innerToken.type) {
-			innerToken = expect(["identifier", "string"]);
+			innerToken = expect(["identifier"]);
 
 			if ("identifier" == innerToken.type) {
 				if ("print" == innerToken.value) {
@@ -223,10 +242,8 @@ function parse(tokens, tree = {}) {
 						value: parseExpression(),
 					});
 				} else {
-					throw new Error("Unexpected identifier at "
-						+ innerToken.line
-						+ ":"
-						+ innerToken.char);
+					tokens.unshift(innerToken);
+					statements.push(parseExpression());
 				}
 			} else {
 				throw new Error("Unexpected "
