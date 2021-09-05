@@ -5,5 +5,13 @@ main() {
 }
 
 hello() {
-	return "Hello, World!"
+	return other()
+}
+
+other() {
+	if (1) {
+		if (1) {
+			return "hello"
+		}
+	}
 }

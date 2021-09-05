@@ -7,7 +7,7 @@ const { compile, lex, parse } = require("./ooclib");
 // TODO: test compiler
 assert.strictEqual(
 	compile(fs.readFileSync("empty.oo", "utf8")),
-	"(function () {\n\t\"use strict\";\n\n})();"
+	"(function () {\n\t\"use strict\";\n})();"
 );
 
 assert.strictEqual(

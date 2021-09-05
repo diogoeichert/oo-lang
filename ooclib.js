@@ -2,13 +2,24 @@
 
 function compile(source, target = "JavaScript") {
 	function compileJavaScript(tree) {
+		function indent(level) {
+			const output = [];
+
+			for (let i = 0; i < level; ++i) {
+				output.push("\t");
+			}
+
+			return output.join("");
+		}
+
 		function makeFunction(node) {
 			const output = [];
-			output.push("\n\tfunction " + node.name + "() {");
 
 			if ("main" == node.name) {
 				mainFunction = true;
 			}
+
+			output.push("\n\tfunction " + node.name + "() {");
 
 			for (const statement of node.statements) {
 				output.push("\t\t" + makeStatement(statement));
@@ -20,6 +31,13 @@ function compile(source, target = "JavaScript") {
 
 		function makeStatement(node) {
 			switch (node.type) {
+			case "if":
+				return "if ("
+					+ makeExpression(node.condition)
+					+ ") {\n"
+					+ makeStatements(node.statements, 1)
+					+ " }";
+
 			case "print":
 				return "console.log(" + makeExpression(node.value) + ");";
 
@@ -28,6 +46,16 @@ function compile(source, target = "JavaScript") {
 			}
 
 			return makeExpression(node) + ";";
+		}
+
+		function makeStatements(statements, level) {
+			const output = [];
+
+			for (const statement of statements) {
+				output.push("\t\t" + indent(level) + makeStatement(statement));
+			}
+
+			return output.join("\n");
 		}
 
 		function makeExpression(node) {
@@ -42,7 +70,7 @@ function compile(source, target = "JavaScript") {
 				return "\"" + node.value + "\"";
 			}
 
-			throw new Error("Not implemented: " + node);
+			throw new Error("Not implemented: " + JSON.stringify(node));
 		}
 
 		const output = [];
@@ -153,10 +181,6 @@ function lex(source) {
 
 function parse(tokens, tree = {}) {
 	function expect(types = [], values = []) {
-		if (!tokens.length) {
-			throw new Error("Unexpected end of input");
-		}
-
 		const token = shift();
 		types = [].concat(types);
 		values = [].concat(values);
@@ -217,17 +241,34 @@ function parse(tokens, tree = {}) {
 		}
 	}
 
-	function parseStatements(statements = []) {
-		let innerToken = expect(["braceClose", "indent", "line"]);
+	function parseStatements(statements = [], indent = 0) {
+		for (let i = 0; i < indent; ++i) {
+			expect("indent");
+		}
+
+		let innerToken = expect(["braceClose", "indent"]);
 
 		if ("braceClose" == innerToken.type) {
-			expect("line");
 			return statements;
 		} else if ("indent" == innerToken.type) {
 			innerToken = expect(["identifier"]);
 
 			if ("identifier" == innerToken.type) {
-				if ("print" == innerToken.value) {
+				if ("if" == innerToken.value) {
+					expect("space");
+					expect("parenOpen");
+					const condition = parseExpression();
+					expect("parenClose");
+					expect("space");
+					expect("braceOpen");
+					expect("line");
+
+					statements.push({
+						type: "if",
+						condition,
+						statements: parseStatements(undefined, indent + 1),
+					});
+				} else if ("print" == innerToken.value) {
 					expect("space");
 
 					statements.push({
@@ -245,6 +286,8 @@ function parse(tokens, tree = {}) {
 					tokens.unshift(innerToken);
 					statements.push(parseExpression());
 				}
+
+				expect("line");
 			} else {
 				throw new Error("Unexpected "
 					+ innerToken.type
@@ -253,13 +296,11 @@ function parse(tokens, tree = {}) {
 					+ ":"
 					+ innerToken.char);
 			}
-
-			expect("line");
 		} else if ("line" == innerToken.type) {
 			// TODO: manage empty lines
 		}
 
-		return parseStatements(statements);
+		return parseStatements(statements, indent);
 	}
 
 	function parseString() {
@@ -305,6 +346,8 @@ function parse(tokens, tree = {}) {
 			name: token.value,
 			statements: parseStatements(),
 		});
+
+		expect("line");
 	}
 
 	return parse(tokens, tree);
