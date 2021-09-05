@@ -10,7 +10,7 @@ function compile(source, target = "JavaScript") {
 				mainFunction = true;
 			}
 
-			for (const statement of node.body) {
+			for (const statement of node.statements) {
 				output.push("\t\t" + makeStatement(statement));
 			}
 
@@ -198,12 +198,12 @@ function parse(tokens, tree = {}) {
 		}
 	}
 
-	function parseBody(body = []) {
+	function parseStatements(statements = []) {
 		let innerToken = expect(["braceClose", "indent", "line"]);
 
 		if ("braceClose" == innerToken.type) {
 			expect("line");
-			return body;
+			return statements;
 		} else if ("indent" == innerToken.type) {
 			innerToken = expect(["identifier", "string"]);
 
@@ -211,14 +211,14 @@ function parse(tokens, tree = {}) {
 				if ("print" == innerToken.value) {
 					expect("space");
 
-					body.push({
+					statements.push({
 						type: "print",
 						value: parseExpression(),
 					});
 				} else if ("return" == innerToken.value) {
 					expect("space");
 
-					body.push({
+					statements.push({
 						type: "return",
 						value: parseExpression(),
 					});
@@ -242,7 +242,7 @@ function parse(tokens, tree = {}) {
 			// TODO: manage empty lines
 		}
 
-		return parseBody(body);
+		return parseStatements(statements);
 	}
 
 	function parseString() {
@@ -286,7 +286,7 @@ function parse(tokens, tree = {}) {
 		tree.functions.push({
 			type: "function",
 			name: token.value,
-			body: parseBody(),
+			statements: parseStatements(),
 		});
 	}
 
