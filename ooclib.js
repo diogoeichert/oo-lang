@@ -60,6 +60,9 @@ function compile(source, target = "JavaScript") {
 
 		function makeExpression(node) {
 			switch (node.type) {
+			case "boolean":
+				return node.value;
+
 			case "call":
 				return node.value + "()";
 
@@ -220,7 +223,17 @@ function parse(tokens, tree = {}) {
 		let innerToken = expect(["identifier", "number", "string"]);
 
 		if ("identifier" == innerToken.type) {
-			if ("parenOpen" == expect("parenOpen").type) {
+			if ("false" == innerToken.value) {
+				return {
+					type: "boolean",
+					value: false,
+				};
+			} else if ("true" == innerToken.value) {
+				return {
+					type: "boolean",
+					value: true,
+				};
+			} else if ("parenOpen" == expect("parenOpen").type) {
 				expect("parenClose");
 
 				return {

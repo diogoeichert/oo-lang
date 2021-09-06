@@ -1,7 +1,5 @@
 "use strict";
 
-const DEBUG = process.env.DEBUG == "true";
-
 const fs = require("fs");
 const path = require("path");
 const { compile } = require("./ooclib");
@@ -23,7 +21,7 @@ try {
 		console.log(output);
 	}
 } catch (e) {
-	if (DEBUG) {
+	if (process.env.DEBUG) {
 		console.error(e);
 	} else {
 		console.error(e.message);

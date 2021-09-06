@@ -9,8 +9,8 @@ hello() {
 }
 
 other() {
-	if (1) {
-		if (1) {
+	if (true) {
+		if (true) {
 			return "hello"
 		}
 	}
