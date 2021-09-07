@@ -4,8 +4,11 @@ The OO programming language
 ![Oolong Tea cup](https://www.pngall.com/wp-content/uploads/2016/04/Tea-PNG.png)
 
 A modern object-oriented language with a clean-yet-familiar syntax. OO is for
-"Object Orientation". Please refer to [pilot.oo](pilot.oo) for a sample
-of the currently-supported syntax.
+"Object Orientation". It's been developed since 2011 with a strong focus on
+compatibility, maintainability and readability.
+
+Please refer to [pilot.oo](pilot.oo) for a sample of the currently-supported
+syntax.
 
 ## Goals
 OO aims for clean code. Basic feature list (not exhaustive):
@@ -13,18 +16,20 @@ OO aims for clean code. Basic feature list (not exhaustive):
 - no global statements, top level grammar should be either class or function
 definitions;
 - the "main" function is the starting point for any program;
-- indentation as part of the grammar.
+- indentation as part of the grammar to avoid unnecessary code-style hassles.
 
 ## Milestones
-- compile OO code to JavaScript; ✓
-- implement primitive types; ✓
-- implement functions; ✓
-- implement control statements;
-- implement loop statements;
-- implement essential expressions;
-- implement classes;
-- implement basic data structures;
-- implement environment-agnostic code generation.
+- concept and basic grammar; ✓
+- compile to JavaScript; ✓
+- primitive types; ✓
+- functions; ✓
+- control statements;
+- loop statements;
+- essential expressions;
+- compile itself;
+- classes;
+- basic data structures;
+- environment-agnostic code generation.
 
 ## Sample usage
 This will compile the `hello.oo` file and run it with `node`:
