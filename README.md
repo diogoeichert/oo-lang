@@ -1,6 +1,8 @@
 # oo-lang
 The OO programming language
 
+![Oolong Tea cup](https://www.pngall.com/wp-content/uploads/2016/04/Tea-PNG.png)
+
 A modern object-oriented language with a clean-yet-familiar syntax. OO is for
 "Object Orientation". Please refer to [pilot.oo](pilot.oo) for a sample
 of the currently-supported syntax.
