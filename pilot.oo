@@ -11,7 +11,9 @@ hello() {
 other() {
 	if (true) {
 		if (true) {
-			return "hello"
+			a = "hello"
+			b = a
+			return a
 		}
 	}
 }

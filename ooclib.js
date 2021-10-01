@@ -19,13 +19,13 @@ function compile(source, target = "JavaScript") {
 				mainFunction = true;
 			}
 
-			output.push("\n\tfunction " + node.name + "() {");
+			output.push("\tfunction " + node.name + "() {");
 
 			for (const statement of node.statements) {
 				output.push("\t\t" + makeStatement(statement));
 			}
 
-			output.push("\t}");
+			output.push("\t}\n");
 			return output.join("\n");
 		}
 
@@ -71,6 +71,15 @@ function compile(source, target = "JavaScript") {
 
 			case "string":
 				return "\"" + node.value + "\"";
+
+			case "variable":
+				return node.value;
+
+			case "symbol":
+				switch (node.value) {
+				case "=":
+					return node.left.value + " = " + makeExpression(node.right);
+				}
 			}
 
 			throw new Error("Not implemented: " + JSON.stringify(node));
@@ -79,7 +88,6 @@ function compile(source, target = "JavaScript") {
 		const output = [];
 		let mainFunction;
 		output.push("(function () {");
-		output.push("\t\"use strict\";");
 
 		if (tree.functions && tree.functions.length) {
 			for (const node of tree.functions) {
@@ -88,7 +96,7 @@ function compile(source, target = "JavaScript") {
 		}
 
 		if (mainFunction) {
-			output.push("\n\tconst mainReturn = main();");
+			output.push("\tconst mainReturn = main();");
 			output.push("\n\tif (mainReturn) {");
 			output.push("\t\tprocess.exit(mainReturn);");
 			output.push("\t}");
@@ -99,6 +107,7 @@ function compile(source, target = "JavaScript") {
 	}
 
 	const tree = parse(lex(source));
+	// console.log(JSON.stringify(tree, null, "\t"));
 
 	switch (target) {
 	case "JavaScript":
@@ -233,12 +242,40 @@ function parse(tokens, tree = {}) {
 					type: "boolean",
 					value: true,
 				};
-			} else if ("parenOpen" == expect("parenOpen").type) {
+			}
+
+			const lastToken = innerToken;
+			innerToken = expect(["line", "parenOpen", "space"]);
+
+			if ("line" == innerToken.type) {
+				tokens.unshift(innerToken);
+
+				return {
+					type: "variable",
+					value: lastToken.value
+				};
+			} else if ("parenOpen" == innerToken.type) {
+				// TODO: expect optional parameters
 				expect("parenClose");
 
 				return {
 					type: "call",
-					value: innerToken.value
+					value: lastToken.value
+				};
+			} else if ("space" == innerToken.type) {
+				innerToken = expect("symbol");
+				expect("space");
+
+				return {
+					type: innerToken.type,
+					value: innerToken.value,
+
+					left: {
+						type: lastToken.type,
+						value: lastToken.value,
+					},
+
+					right: parseExpression(),
 				};
 			}
 		} else if ("number" == innerToken.type) {
