@@ -20,16 +20,17 @@ definitions;
 
 ## Milestones
 - concept and basic grammar; ✓
-- compile to JavaScript; ✓
+- compile to runtime-agnostic JavaScript; ✓
 - primitive types; ✓
 - functions; ✓
-- control statements;
+- variables; ✓
+- control statements; (in progress)
 - loop statements;
-- essential expressions;
-- compile itself;
+- math expressions;
+- string manipulation;
 - classes;
 - basic data structures;
-- environment-agnostic code generation.
+- compile itself.
 
 ## Sample usage
 This will compile the `hello.oo` file and run it with `node`:
