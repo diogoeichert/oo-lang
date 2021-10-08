@@ -7,7 +7,7 @@ A modern object-oriented language with a clean-yet-familiar syntax. OO is for
 "Object Orientation". It's been developed since 2011 with a strong focus on
 compatibility, maintainability and readability.
 
-Please refer to [pilot.oo](pilot.oo) for a sample of the currently-supported
+Please refer to [pilot.oo](sample/pilot.oo) for a sample of the currently-supported
 syntax.
 
 ## Goals
@@ -35,7 +35,7 @@ definitions;
 ## Sample usage
 This will compile the `hello.oo` file and run it with `node`:
 ```
-node ooc.js hello.oo | node
+node ooc.js sample/hello.oo | node
 ```
 
 It should then produce the following output:

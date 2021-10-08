@@ -6,17 +6,17 @@ const { compile, lex, parse } = require("./ooclib");
 
 // TODO: test compiler
 assert.strictEqual(
-	compile(fs.readFileSync("empty.oo", "utf8")),
+	compile(fs.readFileSync("sample/empty.oo", "utf8")),
 	"(function () {\n})();"
 );
 
 assert.strictEqual(
-	compile(fs.readFileSync("hello.oo", "utf8")),
+	compile(fs.readFileSync("sample/hello.oo", "utf8")),
 	"(function () {\n\tfunction main() {\n\t\tconsole.log(\"Hello, World!\");\n\t}\n\n\tconst mainReturn = main();\n\n\tif (mainReturn) {\n\t\tprocess.exit(mainReturn);\n\t}\n})();"
 );
 
 assert.strictEqual(
-	compile(fs.readFileSync("variable.oo", "utf8")),
+	compile(fs.readFileSync("sample/variable.oo", "utf8")),
 	`(function () {
 	function main() {
 		a = 1;
@@ -34,7 +34,7 @@ assert.strictEqual(
 
 // TODO: test lexer
 assert.strictEqual(
-	JSON.stringify(lex(fs.readFileSync("empty.oo", "utf8"))),
+	JSON.stringify(lex(fs.readFileSync("sample/empty.oo", "utf8"))),
 	JSON.stringify([])
 );
 
