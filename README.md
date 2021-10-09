@@ -24,9 +24,9 @@ definitions;
 - primitive types; ✓
 - functions; ✓
 - variables; ✓
+- basic math expressions; ✓
 - control statements; (in progress)
 - loop statements;
-- math expressions;
 - string manipulation;
 - classes;
 - basic data structures;

@@ -77,6 +77,14 @@ function compile(source, target = "JavaScript") {
 
 			case "symbol":
 				switch (node.value) {
+				case "+":
+					return node.left.value + " + " + makeExpression(node.right);
+				case "-":
+					return node.left.value + " - " + makeExpression(node.right);
+				case "*":
+					return node.left.value + " * " + makeExpression(node.right);
+				case "/":
+					return node.left.value + " / " + makeExpression(node.right);
 				case "=":
 					return node.left.value + " = " + makeExpression(node.right);
 				}
